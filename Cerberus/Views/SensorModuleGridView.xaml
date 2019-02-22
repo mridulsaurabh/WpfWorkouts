@@ -1,0 +1,485 @@
+﻿<UserControl x:Class="Cerberus.SensorModuleGridView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dboard="clr-namespace:Cerberus"
+             xmlns:converters="clr-namespace:Cerberus.Converters"
+             mc:Ignorable="d" d:DesignHeight="550" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:CellStyleColorConverter x:Key="CellStyleColorConverter"/>
+        <converters:TemperatureModuleParameterStatusConverter x:Key="TemperatureModuleParameterStatusConverter"/>
+        <converters:ConductivityModuleParamerterStatusConverter x:Key="ConductivityModuleParamerterStatusConverter"/>
+        <converters:TemperatureCompensationBoxVisibilityConverter x:Key="TemperatureCompensationBoxVisibilityConverter" />
+        <converters:SensorModuleSettingsValueConverter x:Key="SensorModuleSettingsValueConverter"/>
+        <dboard:SensorModuleTemplateSelector x:Key="SensorModuleTemplateSelector">
+            <dboard:SensorModuleTemplateSelector.PressureModuleTemplate>
+                <DataTemplate>
+                    <Border Name="RowDetailsTemplateBorder" BorderBrush="#3B73B9" BorderThickness="2" Margin="1" >
+                        <Grid Name="RowDetailsTemplateGrid" Height="180">
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="firstRow" Height=".90*"/>
+                                <RowDefinition x:Name="secondRow" Height="*"/>
+                                <RowDefinition x:Name="thirdRow" Height=".45*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Name="pseudoNameTextBlock" Height="22" Width="80" Text="PseudoName" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,0,0" />
+                            <TextBox Name="pseudoNameTextBox" Height="22" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="90,20,0,0" Text="{Binding Name, UpdateSourceTrigger=LostFocus, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                            <GroupBox Name="logSettingGroupBox" Width="630" Height="70" BorderBrush="#3B73B9" BorderThickness="2"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,0,15,0">
+                                <GroupBox.Header>
+                                    <HeaderedContentControl Header="Log Settings" Foreground="#3B73B9" FontSize="13" FontWeight="Bold" />
+                                </GroupBox.Header>
+                                <Canvas Margin="3">
+                                    <TextBlock Height="22" Width="50" Margin="5,0,0,0" Text="Log Rate" Canvas.Left="5" Canvas.Top="10" />
+                                    <TextBox Name="logRateTextBox" Height="22" Width="28" Text="00" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="55" Canvas.Top="10" />
+                                    <ComboBox Name="logRateComboBox" Height="22" Width="70" SelectedIndex="2" Canvas.Left="95" Canvas.Top="10">
+                                        <ComboBox.Items>
+                                            <TextBlock Text="Hours"/>
+                                            <TextBlock Text="Minutes"/>
+                                            <TextBlock Text="Seconds"/>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                    <TextBlock Height="22" Width="70" Margin="5,0,0,0" Text="Log Duration" Canvas.Left="180" Canvas.Top="10" />
+                                    <TextBox Name="logDaysTextBox" Height="22" Width="28" Text="DD" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="250" Canvas.Top="10" />
+                                    <TextBox Name="logHoursTextBox" Height="22" Width="28" Text="HH" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="280" Canvas.Top="10" />
+                                    <TextBox Name="logMinutesTextBox" Height="22" Width="28" Text="MM" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="310" Canvas.Top="10" />
+                                    <TextBox Name="logSecondsTextBox" Height="22" Width="28" Text="SS" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="340" Canvas.Top="10" />
+
+                                    <TextBlock Height="22" Width="40" Margin="5,0,0,0" Text="Author" Canvas.Left="390" Canvas.Top="10" />
+                                    <StackPanel Canvas.Left="425" Canvas.Top="10">
+                                        <TextBox Name="authorNameTextBox" Height="22" Width="160" TextAlignment="Left" 
+                                             Text="{Binding LogFile.Author, UpdateSourceTrigger=LostFocus, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                                        </TextBox>
+                                        <TextBox Name="authorPhoneTextBox" Height="22" Width="160" Margin="0,10,0,0" TextAlignment="Left" 
+                                             Text="{Binding Phone, UpdateSourceTrigger=LostFocus, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"/>
+                                    </StackPanel>
+                                </Canvas>
+                            </GroupBox>
+                            <ListBox Name="sesnorModuleListBox" Grid.Row="1" Background="Transparent" BorderThickness="0" ItemsSource="{Binding ModuleSensors}"
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.CanContentScroll="False">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Name="InnerRowDetailsTemplateStackPanel" Orientation="Horizontal">
+                                            <TextBlock Height="22" Width="100" Text="Measurement Units" TextAlignment="Left" Margin="5,0,5,0"/>
+                                            <ComboBox Name="measurementUnitComboBox" Height="22" Width="100" ItemsSource="{Binding AvailableUnits}" SelectedItem="{Binding Unit, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+                                            <GroupBox Width="420" Height="70" BorderBrush="#3B73B9" BorderThickness="2" Margin="10,0,0,0">
+                                                <GroupBox.Header>
+                                                    <HeaderedContentControl Header="Alarm Settings" Foreground="#3B73B9" FontSize="13" FontWeight="Bold" />
+                                                </GroupBox.Header>
+                                                <Canvas Margin="3">
+                                                    <TextBlock Height="20" Text="LowLow ≤" TextAlignment="Center" Canvas.Left="5" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.LowLow, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="68" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="Low ≤" TextAlignment="Center" Canvas.Left="115" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.Low, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="155" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="High ≥" TextAlignment="Center" Canvas.Left="200" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.High, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="245" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="HighHigh ≥" TextAlignment="Center" Canvas.Left="290" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.HighHigh, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="356" Canvas.Top="10" />
+                                                </Canvas>
+                                            </GroupBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="Focusable" Value="False"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                <Button Name="saveChangesBtn" Width="80" Height="24" Content="Save" VerticalAlignment="Center" Margin="5,0,0,0" Click="OnSaveButtonClicked"/>
+                                <Button Name="saveAndStartBtn" Width="110" Height="24" Content="Save and start" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnSaveAndStartButtonClicked"/>
+                                <Button Name="stopBtn" Visibility="Collapsed" Width="80" Height="24" Content="Stop" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnStopButtonClicked"/>
+                                <Button Name="cancelChangesBtn" Width="80" Height="24" Content="Cancel" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnCancelChangesButtonClicked" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsActivated}" Value="true">
+                            <Setter TargetName="RowDetailsTemplateGrid" Property="Height" Value="110" />
+                            <Setter TargetName="firstRow" Property="Height" Value="*" />
+                            <Setter TargetName="secondRow" Property="Height" Value="0" />
+                            <Setter TargetName="thirdRow" Property="Height" Value=".40*" />
+                            <Setter TargetName="logSettingGroupBox" Property="HorizontalAlignment" Value="Left" />
+                            <Setter TargetName="logSettingGroupBox" Property="Margin" Value="15,0,0,0" />
+                            <Setter TargetName="pseudoNameTextBox" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="pseudoNameTextBlock" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="saveAndStartBtn" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="stopBtn" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </dboard:SensorModuleTemplateSelector.PressureModuleTemplate>
+            <dboard:SensorModuleTemplateSelector.TemperatureConductivityModuleTemplate>
+                <DataTemplate>
+                    <Border Name="RowDetailsTemplateBorder" BorderBrush="#3B73B9" BorderThickness="2" Margin="1" >
+                        <Grid Name="RowDetailsTemplateGrid" Height="290">
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="firstRow" Height=".75*"/>
+                                <RowDefinition x:Name="secondRow" Height="*"/>
+                                <RowDefinition x:Name="thirdRow" Height=".25*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Name="pseudoNameTextBlock" Height="22" Width="80" Text="PseudoName" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,0,0" />
+                            <TextBox Name="pseudoNameTextBox" Height="22" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="90,20,0,0" Text="{Binding Name, UpdateSourceTrigger=LostFocus, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                            <CheckBox Name="conductivityCheckBox" Content="Conductivity" Height="22" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,70,0,0"
+                                       IsChecked="{Binding CurrentModuleParameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ConductivityModuleParamerterStatusConverter}}"/>
+                            <CheckBox Name="temperatureCheckBox"  Content="Temperature" Height="22" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140,70,676,0"
+                                       IsChecked="{Binding CurrentModuleParameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TemperatureModuleParameterStatusConverter}}"/>
+                            <GroupBox Name="logSettingGroupBox" Width="630" Height="110" BorderBrush="#3B73B9" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,0,15,0">
+                                <GroupBox.Header>
+                                    <HeaderedContentControl Header="Log Settings" Foreground="#3B73B9" FontSize="13" FontWeight="Bold" />
+                                </GroupBox.Header>
+                                <Canvas Margin="3">
+                                    <CheckBox Name="logSettingCheckBox" Width="130" Content="Log at different rate" IsChecked="False" Canvas.Left="6" Canvas.Top="5" />
+                                    <TextBlock Width="20" Text="C" FontWeight="Bold" Canvas.Left="15" Canvas.Top="30" Visibility="{Binding ElementName=logSettingCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <TextBlock Height="22" Width="50" Margin="5,0,0,0" Text="Log Rate" Canvas.Left="40" Canvas.Top="30" />
+                                    <TextBox  Name="logRateTextBox" Height="22" Width="28" Text="00" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="85" Canvas.Top="30" />
+                                    <ComboBox Name="logRateComboBox" Height="22" Width="70" SelectedIndex="2" Canvas.Left="125" Canvas.Top="30">
+                                        <ComboBox.Items>
+                                            <TextBlock Text="Hours"/>
+                                            <TextBlock Text="Minutes"/>
+                                            <TextBlock Text="Seconds"/>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+
+                                    <TextBlock Width="20" Text="T" FontWeight="Bold" Canvas.Left="15" Canvas.Top="60" Visibility="{Binding ElementName=logSettingCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <TextBlock Height="22" Width="50" Margin="5,0,0,0" Text="Log Rate" Canvas.Left="40" Canvas.Top="60" Visibility="{Binding ElementName=logSettingCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <TextBox Height="22" Width="28" Text="00" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="85" Canvas.Top="60" Visibility="{Binding ElementName=logSettingCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <ComboBox Height="22" Width="70" SelectedIndex="2" Canvas.Left="125" Canvas.Top="60" Visibility="{Binding ElementName=logSettingCheckBox, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <ComboBox.Items>
+                                            <TextBlock Text="Hours"/>
+                                            <TextBlock Text="Minutes"/>
+                                            <TextBlock Text="Seconds"/>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+
+                                    <TextBlock Height="22" Width="70" Margin="5,0,0,0" Text="Log Duration" Canvas.Left="205" Canvas.Top="30" />
+                                    <TextBox Name="logDaysTextBox" Height="22" Width="28" Text="DD" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="270" Canvas.Top="30" />
+                                    <TextBox Name="logHoursTextBox" Height="22" Width="28" Text="HH" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="300" Canvas.Top="30" />
+                                    <TextBox Name="logMinutesTextBox" Height="22" Width="28" Text="MM" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="330" Canvas.Top="30" />
+                                    <TextBox Name="logSecondsTextBox" Height="22" Width="28" Text="SS" TextAlignment="Center" Margin="10,0,0,0" Canvas.Left="360" Canvas.Top="30" />
+
+                                    <TextBlock Height="22" Width="40" Margin="5,0,0,0" Text="Author" Canvas.Left="410" Canvas.Top="30" />
+                                    <TextBox Name="authorNameTextBox" Height="22" Width="145" Margin="10,0,0,0" TextAlignment="Left" Canvas.Left="445" Canvas.Top="30" 
+                                             Text="{Binding LogFile.Author, UpdateSourceTrigger=LostFocus, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"/>
+                                </Canvas>
+                            </GroupBox>
+                            <ListBox Name="sesnorModuleListBox" Grid.Row="1" Background="Transparent" BorderThickness="0" ItemsSource="{Binding ModuleSensors}"
+                                     HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.CanContentScroll="False">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Name="InnerRowDetailsTemplateStackPanel" Orientation="Horizontal">
+                                            <TextBlock Height="22" Width="100" Text="Measurement Units" TextAlignment="Left" Margin="5,0,5,0"/>
+                                            <ComboBox Name="measurementUnitComboBox" Height="22" Width="100" ItemsSource="{Binding AvailableUnits}" SelectedItem="{Binding Unit, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>
+                                            <GroupBox Width="200" Height="70" BorderBrush="#3B73B9" BorderThickness="2" Margin="10,0,0,0" Visibility="{Binding Type, Converter={StaticResource TemperatureCompensationBoxVisibilityConverter}}">
+                                                <GroupBox.Header>
+                                                    <HeaderedContentControl Header="Temp Compensation" Foreground="#3B73B9" FontSize="13" FontWeight="Bold" />
+                                                </GroupBox.Header>
+                                                <Canvas>
+                                                    <RadioButton Content="Yes" Canvas.Left="31" Canvas.Top="5" />
+                                                    <RadioButton Content="No" Canvas.Left="88" Canvas.Top="5" />
+                                                    <TextBlock Width="25" Height="20" Text="TC" Canvas.Left="10" Canvas.Top="25" />
+                                                    <TextBox Width="50" Height="20" Canvas.Left="35" Canvas.Top="25" />
+                                                    <TextBlock Width="40" Height="20" Text="Tcoeff" Canvas.Left="90" Canvas.Top="25" />
+                                                    <TextBox Width="50" Height="20" Canvas.Left="130" Canvas.Top="25" />
+                                                </Canvas>
+                                            </GroupBox>
+                                            <GroupBox Width="420" Height="70" BorderBrush="#3B73B9" BorderThickness="2" Margin="10,0,0,0">
+                                                <GroupBox.Header>
+                                                    <HeaderedContentControl Header="Alarm Settings" Foreground="#3B73B9" FontSize="13" FontWeight="Bold" />
+                                                </GroupBox.Header>
+                                                <Canvas Margin="3">
+                                                    <TextBlock Height="20" Text="LowLow ≤" TextAlignment="Center" Canvas.Left="5" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.LowLow, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="68" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="Low ≤" TextAlignment="Center" Canvas.Left="115" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.Low, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="155" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="High ≥" TextAlignment="Center" Canvas.Left="200" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.High, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="245" Canvas.Top="10" />
+                                                    <TextBlock Height="20" Text="HighHigh ≥" TextAlignment="Center" Canvas.Left="290" Canvas.Top="10" />
+                                                    <TextBox Width="40" Height="20" Text="{Binding AlarmValues.HighHigh, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" Canvas.Left="356" Canvas.Top="10" />
+                                                </Canvas>
+                                            </GroupBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="Focusable" Value="False"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                <Button Name="saveChangesBtn" Width="80" Height="24" Content="Save" VerticalAlignment="Center" Margin="5,0,0,0" Click="OnSaveButtonClicked"/>
+                                <Button Name="saveAndStartBtn" Width="110" Height="24" Content="Save and start" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnSaveAndStartButtonClicked"/>
+                                <Button Name="stopBtn" Visibility="Collapsed" Width="80" Height="24" Content="Stop" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnStopButtonClicked"/>
+                                <Button Name="cancelChangesBtn" Width="80" Height="24" Content="Cancel" VerticalAlignment="Center"  Margin="5,0,0,0" Click="OnCancelChangesButtonClicked" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsActivated}" Value="true">
+                            <Setter TargetName="RowDetailsTemplateGrid" Property="Height" Value="145" />
+                            <Setter TargetName="firstRow" Property="Height" Value="*" />
+                            <Setter TargetName="secondRow" Property="Height" Value="0" />
+                            <Setter TargetName="thirdRow" Property="Height" Value=".25*" />
+                            <Setter TargetName="logSettingGroupBox" Property="HorizontalAlignment" Value="Left" />
+                            <Setter TargetName="logSettingGroupBox" Property="Margin" Value="15,0,0,0" />
+                            <Setter TargetName="pseudoNameTextBox" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="pseudoNameTextBlock" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="conductivityCheckBox" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="temperatureCheckBox" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="saveAndStartBtn" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="stopBtn" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </dboard:SensorModuleTemplateSelector.TemperatureConductivityModuleTemplate>
+        </dboard:SensorModuleTemplateSelector>
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid x:Name="defaultSensorsDataGrid" ItemsSource="{Binding GroupSensorModules}"            
+                          IsReadOnly="True" 
+                          AutoGenerateColumns="False"
+                          RowDetailsVisibilityMode="Collapsed"    
+                          SelectionMode="Single"
+                          CanUserReorderColumns="False" CanUserResizeRows="False"
+                          GridLinesVisibility="All"                          
+                          BorderBrush="#3B73B9" BorderThickness="0" Foreground="#182E4A"  MinRowHeight="28" Cursor="Hand"  
+                          VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                          HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                          CellStyle="{StaticResource CustomDataGridCellStyle}"
+                          RowStyle="{StaticResource CustomDataGridRowStyle}" 
+                          RowDetailsTemplateSelector="{StaticResource SensorModuleTemplateSelector}">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource CustomDataGridColumnHeaderStyle}"/>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="#D8E3F1" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Sensor" MinWidth="140" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="15,0,0,0">
+                                <Hyperlink IsEnabled="{Binding IsActivated}" Click="OnHyperlinkClick" CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Path=Name}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Background="LightGoldenrodYellow" Margin="5" Content="Click here to go to the trend view" />
+                                            </ToolTipService.ToolTip>
+                                    </TextBlock>
+                                     <Hyperlink.Style>
+                                        <Style TargetType="Hyperlink" BasedOn="{StaticResource {x:Type Hyperlink}}">
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Style>
+                                    </Hyperlink.Style>
+                                </Hyperlink>                                    
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  MinWidth="20">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox Background="Transparent" IsHitTestVisible="False" BorderThickness="0" ItemsSource="{Binding ModuleSensors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Width="20" Margin="1" Source="{Binding Type, Converter={StaticResource CellStyleColorConverter}}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Present Value" MinWidth="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox Background="Transparent" IsHitTestVisible="False" BorderThickness="0" ItemsSource="{Binding ModuleSensors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding PresentValue}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Measurement Unit" MinWidth="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox Background="Transparent" IsHitTestVisible="False" BorderThickness="0" ItemsSource="{Binding ModuleSensors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding Unit}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Alarm Low" MinWidth="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox Background="Transparent" IsHitTestVisible="False" BorderThickness="0" ItemsSource="{Binding ModuleSensors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding AlarmValues.Low}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Alarm High" MinWidth="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox Background="Transparent" IsHitTestVisible="False" BorderThickness="0" ItemsSource="{Binding ModuleSensors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding AlarmValues.High}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Date and Time" MinWidth="135"  Binding="{Binding DateAndTime}"/>
+                <DataGridTemplateColumn Header="Edit" MinWidth="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="editBtn" Height="25" Content="Edit" Click="OnEditButtonClicked">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="Edit the sensor's settings" Margin="5" Background="LightGoldenrodYellow"/>
+                                </ToolTipService.ToolTip>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBox Text="{Binding Path=Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Border>
+                                            <Expander IsExpanded="True" Foreground="#060C13" Background="#89ABD5">
+                                                <Expander.Header>
+                                                    <StackPanel Height="22" Orientation="Horizontal" Margin="2,0,0,0">
+                                                        <Button Name="editReaderButton">
+                                                            <Button.Content>
+                                                                <Image Source="/Images/Edit.png"/>
+                                                            </Button.Content>
+                                                            <Button.Triggers>
+                                                                <EventTrigger RoutedEvent="Button.Click" SourceName="editReaderButton">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderNameTextBox" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="readerInfoStackPanel" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="saveReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="cancelReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </Button.Triggers>
+                                                        </Button>
+                                                        <StackPanel Name="readerInfoStackPanel" Orientation="Horizontal" Margin="2,0,0,0">
+                                                            <TextBlock x:Name="CurrentReaderTextBlock" Text="{Binding Path=Name}" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="  (" VerticalAlignment="Center" />
+                                                            <TextBlock Text="{Binding Path=ItemCount}" VerticalAlignment="Center" />
+                                                            <TextBlock Text=" Items)" VerticalAlignment="Center" />
+                                                        </StackPanel>
+                                                        <TextBox Name="editReaderNameTextBox" Width="100" Text="Test Reader" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                        <Button Name="saveReaderButton" Visibility="Collapsed" Margin="2,0,0,0" Command="{Binding ElementName=defaultSensorsDataGrid, Path=DataContext.ChangeReaderNameCommand}">
+                                                            <Button.CommandParameter>
+                                                                <MultiBinding Converter="{StaticResource SensorModuleSettingsValueConverter}">
+                                                                    <Binding ElementName="CurrentReaderTextBlock" Path="Text" />
+                                                                    <Binding ElementName="editReaderNameTextBox" Path="Text"/>
+                                                                </MultiBinding>
+                                                            </Button.CommandParameter>
+                                                            <Button.Content>
+                                                                <Image Source="/Images/Save.png"/>
+                                                            </Button.Content>
+                                                            <Button.Triggers>
+                                                                <EventTrigger RoutedEvent="Button.Click" SourceName="saveReaderButton">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderNameTextBox" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="readerInfoStackPanel" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="saveReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </Button.Triggers>
+                                                        </Button>
+                                                        <Button Name="cancelReaderButton" Visibility="Collapsed" Margin="2,0,0,0">
+                                                            <Button.Content>
+                                                                <Image Source="/Images/Cancel.png"/>
+                                                            </Button.Content>
+                                                            <Button.Triggers>
+                                                                <EventTrigger RoutedEvent="Button.Click" SourceName="cancelReaderButton">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderNameTextBox" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="readerInfoStackPanel" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="saveReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="cancelReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="editReaderButton" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </Button.Triggers>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+        </DataGrid>
+    </Grid>
+</UserControl>

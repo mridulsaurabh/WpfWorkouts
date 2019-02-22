@@ -1,0 +1,5 @@
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ExportManager\bin\Debug\ExportManager.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ExportManager\bin\Debug\ExportManager.pdb
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ExportManager\obj\Debug\ExportManager.csprojResolveAssemblyReference.cache
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ExportManager\obj\Debug\ExportManager.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ExportManager\obj\Debug\ExportManager.pdb

@@ -1,0 +1,73 @@
+﻿<Window x:Class="Cerberus.DashBoardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
+        xmlns:dboard="clr-namespace:Cerberus"
+        xmlns:converters="clr-namespace:Cerberus.Converters"       
+        Title="Cerberus" 
+        MinHeight="750" MinWidth="950" Height="750" Width="1000" FontFamily="Segoi">
+    <Window.Resources>
+        <converters:NotificationToVisibilityConverter x:Key="NotificationToVisibilityConverter"/>        
+    </Window.Resources>
+  
+    <Border BorderBrush="#3B73B9" BorderThickness="2">
+        <Grid Name="dashBoardGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".06*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".06*" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="#3B73B9" BorderThickness="0,0,0,2">
+                <Grid Grid.Row="0">
+                    <Image Width="40" Height="40" Source="/Images/Logo.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBlock Text="Cerberus" FontSize="25" FontWeight="Bold" Foreground="#2F5C94" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="55,0,0,0" Cursor="Hand"  MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                    <ComboBox Name="transitionTypeComboBox" Visibility="Visible" Height="24" Width="150" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0" SelectionChanged="transitionTypeComboBox_SelectionChanged"/>
+                </Grid>
+            </Border>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Name="defaultViewBtn" Height="24" Width="140" Margin="25,0,0,0" Content="Switch to default View" Click="OnSwitchToDefaultViewButtonClicked"/>
+                <Button Name="showExperiments" Height="24" Width="130" Margin="10,0,0,0" Content="Show calculate data" Click="OnShowExperimentButtonClicked"/>
+                <Button Height="24" Width="150" Margin="10,0,0,0" Content="Select sensor modules" Click="OnSelectionViewButtonClicked"/>
+                <Button Height="24" Width="150" Margin="10,0,0,0" Content="Arrange sensor modules" Click="OnArrangeRowsButtonClicked"/>
+            </StackPanel>
+            <dboard:RegionNavigationControl x:Name="regionNavigationControl" Grid.Row="2" 
+                    BorderBrush="#3B73B9" BorderThickness="0,2,0,2" TransitionType="SlideAndFade"/>
+            
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width=".30*"/>
+                </Grid.ColumnDefinitions>
+                <ContentControl Name="notifyMessagePopUp" Grid.Column="0" Height="40" MinWidth="200" Width="Auto" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                ContentTemplate="{StaticResource NotificationWindowDataTemplate}" Content="{Binding LatestNotification}" Cursor="Hand"
+                                Visibility="{Binding LatestNotification, Converter={StaticResource NotificationToVisibilityConverter}}"
+                                MouseLeftButtonDown="OnNotificationIconClicked"/>
+                <Button Name="createExperimentButton" Grid.Column="1" Height="32" Width="160" Content="Calculate" Margin="0,0,30,0"
+                        HorizontalAlignment="Right" VerticalAlignment="Center" Click="OnCreateExperimentButtonClicked"/>
+            </Grid>
+            <Border Grid.Row="4" BorderBrush="#3B73B9" BorderThickness="0,2,0,0">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand"
+                            Visibility="{Binding LatestNotification, Converter={StaticResource NotificationToVisibilityConverter}}">
+                        <Path Fill="Red" Height="25" Width="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2" MouseLeftButtonDown="OnNotificationIconClicked">
+                            <Path.Data>
+                                <GeometryGroup FillRule="EvenOdd">
+                                    <RectangleGeometry RadiusX="3" RadiusY="4" Rect="7.25,1,6.5,15"/>
+                                    <EllipseGeometry Center="10.5,20" RadiusX="2.5" RadiusY="2.5" />
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                        <TextBlock Text="{Binding TotalNotifications}" VerticalAlignment="Center" Margin="0,2,0,5"/>
+                        <TextBlock Width="120" Text="Notifications Received" VerticalAlignment="Center" Margin="1,2,0,5" MouseLeftButtonDown="OnNotificationIconClicked" />
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="You have received some notifications." Margin="5" Background="LightGoldenrodYellow"/>
+                        </ToolTipService.ToolTip>
+                    </StackPanel>
+                    <TextBlock Name="DataTimeTextBoxPanel" Width="192" Text="{Binding CurrentSystemTime, Mode=OneWay}" 
+                           TextAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>  

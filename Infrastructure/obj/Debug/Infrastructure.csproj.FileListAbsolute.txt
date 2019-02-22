@@ -1,0 +1,7 @@
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\bin\Debug\Infrastructure.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\bin\Debug\Infrastructure.pdb
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\obj\Debug\Infrastructure.csprojResolveAssemblyReference.cache
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\obj\Debug\Infrastructure.Properties.Resources.resources
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\obj\Debug\Infrastructure.csproj.GenerateResource.Cache
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\obj\Debug\Infrastructure.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\Infrastructure\obj\Debug\Infrastructure.pdb

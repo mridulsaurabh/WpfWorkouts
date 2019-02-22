@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="Cerberus.TrendView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:Cerberus.Converters"
+             mc:Ignorable="d" d:DesignHeight="550" d:DesignWidth="800" FontFamily="GE Inspira">
+    <UserControl.Resources>
+        <converters:ColumnWidthSetterConverter x:Key="ColumnWidthSetterConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:SensorModuleSettingsValueConverter x:Key="SensorModuleSettingsValueConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="#3B73B9" BorderThickness="0,0,0,1">
+            <Grid>
+                <TextBlock Text="Selected Trend" FontSize="14" Width="95" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                <ComboBox Height="25" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,0,0,0"
+                          SelectedItem="{Binding SelectedTrend}" ItemsSource="{Binding AvailableModules}"/>               
+                <Button Name="exportBtn" Height="25" Width="80" Content="Export" Command="{Binding ExportCommand}" CommandParameter="{Binding SelectedTrend}"
+                        HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ProgressBar Height="3" IsIndeterminate="True" Foreground="Orange"
+                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"
+                             VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+            </Grid>            
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="600"/>
+                <ColumnDefinition Width="27"/>
+                <ColumnDefinition Width="{Binding ElementName=expander, Path=IsExpanded,Converter={StaticResource ColumnWidthSetterConverter}}"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Name="trendTextblock" Grid.Row="0" Grid.Column="0" Text="Trend View" FontSize="50" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Name="notesBtn" Grid.Row="1" Grid.Column="0" Height="25" Width="100" Content="Notes" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">                 
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click" SourceName="notesBtn">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="notesStackPanel" Storyboard.TargetProperty="Visibility">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+            <StackPanel Name="notesStackPanel" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Visibility="Collapsed">                
+                <TextBox Name="noteTextBox" Height="25" MinWidth="420" HorizontalAlignment="Stretch" Margin="5,0,0,0"/>
+                <Button Name="addBtn" Height="25" Width="80" Content="Add" Margin="5,0,0,0" Command="{Binding AddNote}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource SensorModuleSettingsValueConverter}">
+                            <Binding ElementName="noteTextBox" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click" SourceName="addBtn">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="notesStackPanel" Storyboard.TargetProperty="Visibility">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}"/>
+                                    </ObjectAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button Name="cancelBtn"  Height="25" Width="80" Content="Cancel" Margin="5,0,0,0">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click" SourceName="cancelBtn">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="notesStackPanel" Storyboard.TargetProperty="Visibility">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}"/>
+                                    </ObjectAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackPanel>
+            <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" BorderBrush="#3B73B9" BorderThickness="2,0,0,0">
+                <StackPanel Orientation="Vertical" FlowDirection="RightToLeft">
+                    <Expander Name="expander" IsExpanded="True" ExpandDirection="Left"/>
+                    <Label Name="textLabel" Content="Show Panel" Width="80" FontSize="13" FontWeight="Bold" Visibility="{Binding ElementName=expander, Path=IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Label.LayoutTransform>
+                            <RotateTransform Angle="90"/>
+                        </Label.LayoutTransform>
+                    </Label>
+                </StackPanel>
+            </Border>
+            <Button Grid.Row="1" Grid.Column="2" Height="30" Width="180" Content="Stop" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,30,0"/>
+        </Grid>
+    </Grid>
+</UserControl>

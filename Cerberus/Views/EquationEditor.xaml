@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Cerberus.EquationEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dboard="clr-namespace:Cerberus"
+             mc:Ignorable="d" Height="120" Width="275" FontFamily="GE Inspira">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="28"/>
+            <ColumnDefinition Width="28"/>
+            <ColumnDefinition  Width="28"/>
+            <ColumnDefinition Width="28"/>
+            <ColumnDefinition Width="28"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="equationTextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" 
+                 Text="Enter equation here..." HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,2"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="7" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="1" Grid.Column="2" Content="8" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="1" Grid.Column="3" Content="9" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="1" Grid.Column="4" Content="/" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="4" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="5" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="2" Grid.Column="3" Content="6" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="2" Grid.Column="4" Content="*" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="3" Grid.Column="1" Content="1" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="3" Grid.Column="2" Content="2" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="3" Grid.Column="3" Content="3" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="3" Grid.Column="4" Content="-" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Content="0" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="4" Grid.Column="3" Content="." Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="4" Grid.Column="4" Content="+" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="1" Grid.Column="5" Content="C" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="2" Grid.Column="5" Content="«" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="3" Grid.Column="5" Content="(" Click="OnKeyPadButtonClicked"/>
+        <Button Grid.Row="4" Grid.Column="5" Content=")" Click="OnKeyPadButtonClicked"/>
+        <ListBox x:Name="availableSensors" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" ItemsSource="{Binding SelectedSensors}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="1,0,0,1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Button Height="24" MinWidth="100" Margin="2" Content="{Binding ID}" Click="OnKeyPadButtonClicked" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+    </Grid>
+</UserControl>

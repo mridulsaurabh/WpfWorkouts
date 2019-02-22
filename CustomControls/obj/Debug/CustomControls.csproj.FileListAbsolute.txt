@@ -1,0 +1,5 @@
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\CustomControls\bin\Debug\CustomControls.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\CustomControls\bin\Debug\CustomControls.pdb
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\CustomControls\obj\Debug\CustomControls.csprojResolveAssemblyReference.cache
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\CustomControls\obj\Debug\CustomControls.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\CustomControls\obj\Debug\CustomControls.pdb

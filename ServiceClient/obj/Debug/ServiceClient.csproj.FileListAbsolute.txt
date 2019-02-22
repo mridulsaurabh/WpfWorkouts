@@ -1,0 +1,13 @@
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\ServiceClient.dll.config
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\ServiceClient.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\ServiceClient.pdb
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Infrastructure.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Infrastructure.pdb
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\obj\Debug\ServiceClient.csprojResolveAssemblyReference.cache
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\obj\Debug\ServiceClient.dll
+C:\Users\mver19\Source\Workspaces\Xtrecators\Cerberus\Src\ServiceClient\obj\Debug\ServiceClient.pdb
